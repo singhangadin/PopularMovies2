@@ -16,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -44,12 +45,14 @@ import java.util.ArrayList;
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int DETAIL_LOADER = 0;
     private Context context;
+    private boolean hide=false;
     public static final String DETAIL_URI = "URI";
     private Uri mUri;
     private ImageView img;
     private AppCompatButton fav_button;
-    private TextView rate,reldate,summary,trailer_indicator,review_indicator,overview_indicator;
+    private TextView rate,reldate,summary,title_text;
     private MyRecyclerView trailer,review;
+    private NestedScrollView nestedScrollView;
 
     private static final String[] MOVIE_COLUMNS = {
         MoviesContract.PopularEntry._ID,
@@ -89,13 +92,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View V=inflater.inflate(R.layout.fragment_detail, container, false);
+        nestedScrollView=(NestedScrollView)V.findViewById(R.id.nested_scroll);
         img=(ImageView)V.findViewById(R.id.imageView);
         rate=(TextView)V.findViewById(R.id.avg);
+        title_text=(TextView)V.findViewById(R.id.title_text);
         reldate=(TextView)V.findViewById(R.id.rel_date);
         summary=(TextView)V.findViewById(R.id.summary);
-        trailer_indicator=(TextView)V.findViewById(R.id.trailer_text);
-        review_indicator=(TextView)V.findViewById(R.id.review_text);
-        overview_indicator=(TextView)V.findViewById(R.id.overview_text);
         trailer=(MyRecyclerView) V.findViewById(R.id.trailer_list);
         review=(MyRecyclerView) V.findViewById(R.id.review_list);
         fav_button=(AppCompatButton) V.findViewById(R.id.fav_button);
@@ -156,12 +158,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader,final Cursor data) {
+        nestedScrollView.setVisibility(View.VISIBLE);
         data.moveToFirst();
         try {
             CollapsingToolbarLayout toolbar = ((DetailActivity) getActivity()).getToolbar();
             toolbar.setTitle(data.getString(COL_TITLE));
             ImageView titleImage= ((DetailActivity) getActivity()).getTitleImage();
             Picasso.with(context).load("http://image.tmdb.org/t/p/w342/" + data.getString(COL_MOVIE_POSTER)).into(titleImage);
+            hide=true;
         }
         catch(Exception e)
         {   e.printStackTrace();
@@ -242,20 +246,24 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                     }
                 }
             });
-            overview_indicator.setVisibility(View.VISIBLE);
-            trailer_indicator.setVisibility(View.VISIBLE);
-            review_indicator.setVisibility(View.VISIBLE);
             rate.setText("Rated:\n" + data.getString(COL_MOVIE_VOTE_AVERAGE) + "/10");
             reldate.setText("Released On:\n" + data.getString(COL_MOVIE_RELEASE_DATE));
             summary.setText(data.getString(COL_MOVIE_OVERVIEW));
-            if ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE) {
-                Picasso.with(context).load("http://image.tmdb.org/t/p/w500/" + data.getString(COL_MOVIE_POSTER)).into(img);
-            } else if ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
-                Picasso.with(context).load("http://image.tmdb.org/t/p/w342/" + data.getString(COL_MOVIE_POSTER)).into(img);
-            } else if ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_SMALL) {
-                Picasso.with(context).load("http://image.tmdb.org/t/p/w185/" + data.getString(COL_MOVIE_POSTER)).into(img);
-            } else {
-                Picasso.with(context).load("http://image.tmdb.org/t/p/w185/" + data.getString(COL_MOVIE_POSTER)).into(img);
+            if(hide)
+            {   img.setVisibility(View.GONE);
+                title_text.setVisibility(View.GONE);
+            }
+            else {
+                title_text.setText(data.getString(COL_TITLE));
+                if ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE) {
+                    Picasso.with(context).load("http://image.tmdb.org/t/p/w500/" + data.getString(COL_MOVIE_POSTER)).into(img);
+                } else if ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
+                    Picasso.with(context).load("http://image.tmdb.org/t/p/w500/" + data.getString(COL_MOVIE_POSTER)).into(img);
+                } else if ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_SMALL) {
+                    Picasso.with(context).load("http://image.tmdb.org/t/p/w500/" + data.getString(COL_MOVIE_POSTER)).into(img);
+                } else {
+                    Picasso.with(context).load("http://image.tmdb.org/t/p/w500/" + data.getString(COL_MOVIE_POSTER)).into(img);
+                }
             }
             final ArrayList<ListItem> trailer_listItems=new ArrayList<>();
             JSONArray arr=new JSONArray(data.getString(COL_MOVIE_TRAILER));
