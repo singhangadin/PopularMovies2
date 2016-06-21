@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.android.popularmovies.model.SpKeys;
+import com.example.android.popularmovies.sync.MoviesSyncAdapter;
 
 public class MainActivity extends AppCompatActivity implements MovieGridFragment.Callback {
     private Toolbar toolbar;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements MovieGridFragment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MoviesSyncAdapter.initializeSyncAdapter(this);
         preferences= PreferenceManager.getDefaultSharedPreferences(this);
         sort=preferences.getString(SpKeys.SORT_KEY,"0");
         setContentView(R.layout.activity_main);

@@ -12,4 +12,5 @@ public class TableStructure {
     public static final String COLUMN_VOTE_AVERAGE="average";
     public static final String COLUMN_OVERVIEW="overview";
     public static final String COLUMN_TRAILER="trailer";
+    public static final String COLUMN_REVIEWS="reviews";
 }

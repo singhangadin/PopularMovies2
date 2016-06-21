@@ -6,4 +6,9 @@
         android:key="@string/sort_key"
         android:title="@string/sort_title" />
 
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/notifs"
+        android:title="@string/turn_off_notification"/>
+
 </PreferenceScreen>

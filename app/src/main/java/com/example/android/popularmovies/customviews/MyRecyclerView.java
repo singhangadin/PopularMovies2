@@ -1,4 +1,4 @@
-package com.example.android.customviews;
+package com.example.android.popularmovies.customviews;
 
 import android.content.Context;
 import android.support.annotation.Nullable;

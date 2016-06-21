@@ -1,9 +1,6 @@
 package com.example.android.popularmovies;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -26,7 +23,7 @@ import android.widget.ListView;
 import com.example.android.popularmovies.data.MoviesContract;
 import com.example.android.popularmovies.model.GridAdapter;
 import com.example.android.popularmovies.model.SpKeys;
-import com.example.android.popularmovies.service.MoviesService;
+import com.example.android.popularmovies.sync.MoviesSyncAdapter;
 
 public class MovieGridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>
 {   private Context context;
@@ -112,44 +109,8 @@ public class MovieGridFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     private void updateMovie() {
-        sort=preference.getString(SpKeys.SORT_KEY,context.getResources().getString(R.string.sort_default));
-//        Uri movieUri;
-//        switch(sort)
-//        {   case "0":
-//            default:    movieUri = MoviesContract.PopularEntry.CONTENT_URI;
-//                break;
-//
-//            case "1":   movieUri = MoviesContract.RatedEntry.CONTENT_URI;
-//                break;
-//
-//            case "2":   movieUri = MoviesContract.FavouritesEntry.CONTENT_URI;
-//                break;
-//        }
-//        Intent intent = new Intent(getActivity(), MoviesService.class);
-//        intent.putExtra(MoviesService.SORT_EXTRA,sort);
-//        getActivity().startService(intent);
-//        cur = getActivity().getContentResolver().query(movieUri,MOVIE_COLUMNS, null, null, null);
-//        gridAdapter=new GridAdapter(context,cur,0,sort);
-//        movieGrid.setAdapter(gridAdapter);
-//        new FetchMoviesTask(getActivity()).execute();
-        Intent intent = new Intent(getActivity(), MoviesService.AlarmReciever.class);
-        intent.putExtra(MoviesService.SORT_EXTRA,sort);
-        PendingIntent pi = PendingIntent.getBroadcast(getActivity(), 0,intent,PendingIntent.FLAG_ONE_SHOT);
-        AlarmManager am=(AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
-        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pi);
+        MoviesSyncAdapter.syncImmediately(getActivity());
     }
-
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        updateMovie();
-//    }
-//
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        updateMovie();
-//    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

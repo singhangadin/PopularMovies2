@@ -15,7 +15,7 @@
         android:background="@drawable/touch_selector"
         android:orientation="vertical">
 
-        <com.example.android.customviews.SquareImageView
+        <com.example.android.popularmovies.customviews.SquareImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@mipmap/ic_launcher"

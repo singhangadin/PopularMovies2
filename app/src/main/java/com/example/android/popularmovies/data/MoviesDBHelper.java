@@ -26,7 +26,8 @@ public class MoviesDBHelper extends SQLiteOpenHelper
                 MoviesContract.RatedEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL, " +
                 MoviesContract.RatedEntry.COLUMN_VOTE_AVERAGE + " REAL NOT NULL ," +
                 MoviesContract.RatedEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
-                MoviesContract.RatedEntry.COLUMN_TRAILER + " TEXT NOT NULL " +
+                MoviesContract.RatedEntry.COLUMN_TRAILER + " TEXT NOT NULL, " +
+                MoviesContract.RatedEntry.COLUMN_REVIEWS + " TEXT NOT NULL " +
                 " );";
 
         final String SQL_CREATE_POPULAR_TABLE="CREATE TABLE " + MoviesContract.PopularEntry.TABLE_NAME + " (" +
@@ -37,7 +38,8 @@ public class MoviesDBHelper extends SQLiteOpenHelper
                 MoviesContract.PopularEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL, " +
                 MoviesContract.PopularEntry.COLUMN_VOTE_AVERAGE + " REAL NOT NULL ," +
                 MoviesContract.PopularEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
-                MoviesContract.PopularEntry.COLUMN_TRAILER + " TEXT NOT NULL " +
+                MoviesContract.PopularEntry.COLUMN_TRAILER + " TEXT NOT NULL, " +
+                MoviesContract.PopularEntry.COLUMN_REVIEWS + " TEXT NOT NULL " +
                 " );";
 
         final String SQL_CREATE_FAVOURITES_TABLE="CREATE TABLE " + MoviesContract.FavouritesEntry.TABLE_NAME + " (" +
@@ -48,7 +50,8 @@ public class MoviesDBHelper extends SQLiteOpenHelper
                 MoviesContract.FavouritesEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL, " +
                 MoviesContract.FavouritesEntry.COLUMN_VOTE_AVERAGE + " REAL NOT NULL ," +
                 MoviesContract.FavouritesEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
-                MoviesContract.FavouritesEntry.COLUMN_TRAILER + " TEXT NOT NULL " +
+                MoviesContract.FavouritesEntry.COLUMN_TRAILER + " TEXT NOT NULL, " +
+                MoviesContract.FavouritesEntry.COLUMN_REVIEWS + " TEXT NOT NULL " +
                 " );";
 
         db.execSQL(SQL_CREATE_RATED_TABLE);

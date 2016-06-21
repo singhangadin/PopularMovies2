@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.android.customviews.SquareImageView;
+import com.example.android.popularmovies.customviews.SquareImageView;
 import com.example.android.popularmovies.MovieGridFragment;
 import com.example.android.popularmovies.R;
 import com.squareup.picasso.Picasso;

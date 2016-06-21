@@ -32,4 +32,10 @@
     <string name="add_to_favourites">Add to Favourites</string>
     <string name="remove_from_favourites">Remove from Favourites</string>
     <string name="trailers">Trailers:</string>
+    <string name="sync_account_type">popularmovies.example.com</string>
+    <string name="content_authority">com.example.android.popularmovies</string>
+    <string name="notifs">notification</string>
+    <string name="turn_off_notification">Turn Off Notification</string>
+    <string name="reviews">Reviews:</string>
+    <string name="overview">Overview</string>
 </resources>

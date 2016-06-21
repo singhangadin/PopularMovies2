@@ -7,4 +7,5 @@ package com.example.android.popularmovies.model;
 public abstract class SpKeys
 {   public static final String API_KEY="";  //Put your API key here
     public static final String SORT_KEY="sortorder";
+    public static final String NOTIFICATION_KEY="notification";
 }

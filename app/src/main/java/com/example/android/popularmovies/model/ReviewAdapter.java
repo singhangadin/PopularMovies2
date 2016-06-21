@@ -2,6 +2,7 @@ package com.example.android.popularmovies.model;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,24 +16,25 @@ import java.util.ArrayList;
  * Created by Angad on 08/04/2016.
  * </p>
  */
-public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.MoviesViewHolder>
+public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MoviesViewHolder>
 {   private Context context;
     private ArrayList<ListItem> listItems;
 
-    public TrailerAdapter(Context context, ArrayList<ListItem> listItems) {
+    public ReviewAdapter(Context context, ArrayList<ListItem> listItems) {
         this.context = context;
         this.listItems = listItems;
     }
 
     @Override
     public MoviesViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {   View V= LayoutInflater.from(context).inflate(R.layout.trailer_list_item,parent,false);
+    {   View V= LayoutInflater.from(context).inflate(R.layout.review_list_item,parent,false);
         return new MoviesViewHolder(V);
     }
 
     @Override
     public void onBindViewHolder(final MoviesViewHolder holder, int position)
-    {   holder.title.setText(listItems.get(position).getTitle());
+    {   holder.author.setText(listItems.get(position).getKey());
+        holder.content.setText(listItems.get(position).getTitle());
     }
 
     @Override
@@ -41,11 +43,12 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.MoviesVi
     }
 
     public class MoviesViewHolder extends RecyclerView.ViewHolder
-    {   public TextView title;
+    {   public TextView author,content;
 
         public MoviesViewHolder(View itemView)
         {   super(itemView);
-            title=(TextView)itemView.findViewById(R.id.trailer_title);
+            author=(TextView)itemView.findViewById(R.id.author);
+            content=(TextView)itemView.findViewById(R.id.content);
         }
     }
 }

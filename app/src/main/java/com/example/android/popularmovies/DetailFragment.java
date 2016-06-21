@@ -16,19 +16,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.customviews.MyRecyclerView;
+import com.example.android.popularmovies.customviews.MyRecyclerView;
 import com.example.android.popularmovies.data.MoviesContract;
 import com.example.android.popularmovies.model.ListItem;
+import com.example.android.popularmovies.model.ReviewAdapter;
 import com.example.android.popularmovies.model.SpKeys;
 import com.example.android.popularmovies.model.TrailerAdapter;
 import com.squareup.picasso.Picasso;
@@ -47,9 +47,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public static final String DETAIL_URI = "URI";
     private Uri mUri;
     private ImageView img;
-    private Button fav_button;
-    private TextView rate,reldate,summary,trailer_indicator;
-    private MyRecyclerView trailer;
+    private AppCompatButton fav_button;
+    private TextView rate,reldate,summary,trailer_indicator,review_indicator,overview_indicator;
+    private MyRecyclerView trailer,review;
 
     private static final String[] MOVIE_COLUMNS = {
         MoviesContract.PopularEntry._ID,
@@ -60,17 +60,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         MoviesContract.PopularEntry.COLUMN_OVERVIEW,
         MoviesContract.PopularEntry.COLUMN_POSTER,
         MoviesContract.PopularEntry.COLUMN_TRAILER,
-    };
-
-    private static final String[] FAVOURITE_COLUMNS = {
-        MoviesContract.PopularEntry._ID,
-        MoviesContract.PopularEntry.COLUMN_ID,
-        MoviesContract.PopularEntry.COLUMN_TITLE,
-        MoviesContract.PopularEntry.COLUMN_VOTE_AVERAGE,
-        MoviesContract.PopularEntry.COLUMN_RELEASE_DATE,
-        MoviesContract.PopularEntry.COLUMN_OVERVIEW,
-        MoviesContract.PopularEntry.COLUMN_POSTER,
-        MoviesContract.PopularEntry.COLUMN_TRAILER
+        MoviesContract.PopularEntry.COLUMN_REVIEWS
     };
 
     private static final int COL_ID = 0;
@@ -81,6 +71,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private static final int COL_MOVIE_OVERVIEW = 5;
     private static final int COL_MOVIE_POSTER = 6;
     private static final int COL_MOVIE_TRAILER = 7;
+    private static final int COL_MOVIE_REVIEWS = 8;
 
     public DetailFragment() {
     }
@@ -103,8 +94,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         reldate=(TextView)V.findViewById(R.id.rel_date);
         summary=(TextView)V.findViewById(R.id.summary);
         trailer_indicator=(TextView)V.findViewById(R.id.trailer_text);
+        review_indicator=(TextView)V.findViewById(R.id.review_text);
+        overview_indicator=(TextView)V.findViewById(R.id.overview_text);
         trailer=(MyRecyclerView) V.findViewById(R.id.trailer_list);
-        fav_button=(Button) V.findViewById(R.id.fav_button);
+        review=(MyRecyclerView) V.findViewById(R.id.review_list);
+        fav_button=(AppCompatButton) V.findViewById(R.id.fav_button);
         return V;
     }
 
@@ -148,29 +142,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if ( null != mUri ) {
-            SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(context);
-            final String sort=preferences.getString(SpKeys.SORT_KEY,"0");
-            switch(sort)
-            {   case "0":
-                case "1":   return new CursorLoader(
-                                    context,
-                                    mUri,
-                                    MOVIE_COLUMNS,
-                                    null,
-                                    null,
-                                    null
-                            );
-
-                case "2":   return new CursorLoader(
-                                    context,
-                                    mUri,
-                                    FAVOURITE_COLUMNS,
-                                    null,
-                                    null,
-                                    null
-                            );
-            }
-
+            return new CursorLoader(
+                    context,
+                    mUri,
+                    MOVIE_COLUMNS,
+                    null,
+                    null,
+                    null
+            );
         }
         return null;
     }
@@ -239,12 +218,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                                         moviesValues.put(MoviesContract.FavouritesEntry.COLUMN_OVERVIEW, data.getString(COL_MOVIE_OVERVIEW));
                                         moviesValues.put(MoviesContract.FavouritesEntry.COLUMN_VOTE_AVERAGE, data.getString(COL_MOVIE_VOTE_AVERAGE));
                                         moviesValues.put(MoviesContract.FavouritesEntry.COLUMN_TRAILER, data.getString(COL_MOVIE_TRAILER));
+                                        moviesValues.put(MoviesContract.FavouritesEntry.COLUMN_REVIEWS, data.getString(COL_MOVIE_REVIEWS));
                                         context.getContentResolver().insert(mUri, moviesValues);
                                     }
                                     else
                                     {   String deleteArg[]={data.getString(COL_MOVIE_ID)};
                                         context.getContentResolver()
                                                 .delete(MoviesContract.FavouritesEntry.buildFavouriteIDUri(data.getString(COL_MOVIE_ID)),null,deleteArg);
+                                        fav_button.setText(context.getResources().getString(R.string.add_to_favourites));
                                     }
                                     if(cursor!=null)
                                         cursor.close();
@@ -261,10 +242,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                     }
                 }
             });
+            overview_indicator.setVisibility(View.VISIBLE);
             trailer_indicator.setVisibility(View.VISIBLE);
+            review_indicator.setVisibility(View.VISIBLE);
             rate.setText("Rated:\n" + data.getString(COL_MOVIE_VOTE_AVERAGE) + "/10");
             reldate.setText("Released On:\n" + data.getString(COL_MOVIE_RELEASE_DATE));
-            summary.setText("Summary:\n" + data.getString(COL_MOVIE_OVERVIEW));
+            summary.setText(data.getString(COL_MOVIE_OVERVIEW));
             if ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE) {
                 Picasso.with(context).load("http://image.tmdb.org/t/p/w500/" + data.getString(COL_MOVIE_POSTER)).into(img);
             } else if ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
@@ -274,25 +257,34 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             } else {
                 Picasso.with(context).load("http://image.tmdb.org/t/p/w185/" + data.getString(COL_MOVIE_POSTER)).into(img);
             }
-            final ArrayList<ListItem> listItems=new ArrayList<>();
-            Log.e("JSON",data.getString(COL_MOVIE_TRAILER));
+            final ArrayList<ListItem> trailer_listItems=new ArrayList<>();
             JSONArray arr=new JSONArray(data.getString(COL_MOVIE_TRAILER));
             for(int i=0;i<arr.length();i++)
             {   JSONObject obj=arr.getJSONObject(i);
                 ListItem item=new ListItem();
                 item.setTitle(obj.optString("name"));
                 item.setKey(obj.optString("key"));
-                listItems.add(item);
+                trailer_listItems.add(item);
             }
-            Log.e("JSON",listItems.size()+"");
             trailer.setLayoutManager(new LinearLayoutManager(context));
-            trailer.setAdapter(new TrailerAdapter(context,listItems));
+            trailer.setAdapter(new TrailerAdapter(context,trailer_listItems));
             trailer.addOnItemTouchListener(new MyRecyclerView.OnItemClickListener() {
                 @Override
                 public void onClick(View V, int position) {
-                    startActivity(watchYoutubeVideo(listItems.get(position).getKey()));
+                    startActivity(watchYoutubeVideo(trailer_listItems.get(position).getKey()));
                 }
             });
+            final ArrayList<ListItem> review_listItems=new ArrayList<>();
+            JSONArray arr2=new JSONArray(data.getString(COL_MOVIE_REVIEWS));
+            for(int i=0;i<arr2.length();i++)
+            {   JSONObject obj=arr2.getJSONObject(i);
+                ListItem item=new ListItem();
+                item.setTitle(obj.optString("content"));
+                item.setKey(obj.optString("author"));
+                review_listItems.add(item);
+            }
+            review.setLayoutManager(new LinearLayoutManager(context));
+            review.setAdapter(new ReviewAdapter(context,review_listItems));
         }
         catch(Exception e)
         {   e.printStackTrace();
