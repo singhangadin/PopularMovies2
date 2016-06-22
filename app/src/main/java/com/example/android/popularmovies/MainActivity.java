@@ -57,13 +57,6 @@ public class MainActivity extends AppCompatActivity implements MovieGridFragment
         return super.onOptionsItemSelected(item);
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(this);
-//        String sort=preferences.getString(SpKeys.SORT_KEY,"0");
-//
-//    }
     @Override
     protected void onResume() {
         super.onResume();

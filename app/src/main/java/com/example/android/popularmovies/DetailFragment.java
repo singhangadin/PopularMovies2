@@ -17,11 +17,11 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,9 +39,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int DETAIL_LOADER = 0;
     private Context context;
@@ -49,7 +46,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public static final String DETAIL_URI = "URI";
     private Uri mUri;
     private ImageView img;
-    private AppCompatButton fav_button;
+    private ImageButton fav_button;
     private TextView rate,reldate,summary,title_text;
     private MyRecyclerView trailer,review;
     private NestedScrollView nestedScrollView;
@@ -100,7 +97,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         summary=(TextView)V.findViewById(R.id.summary);
         trailer=(MyRecyclerView) V.findViewById(R.id.trailer_list);
         review=(MyRecyclerView) V.findViewById(R.id.review_list);
-        fav_button=(AppCompatButton) V.findViewById(R.id.fav_button);
+        fav_button=(ImageButton) V.findViewById(R.id.fav_button);
         return V;
     }
 
@@ -184,17 +181,17 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                                         ,null
                                         ,null);
                             if (cursor!=null&&cursor.getCount()==0) {
-                                fav_button.setText(context.getResources().getString(R.string.add_to_favourites));
+                                fav_button.setImageResource(R.mipmap.ic_action_unfavorite);
                             }
                             else
-                            {   fav_button.setText(context.getResources().getString(R.string.remove_from_favourites));
+                            {   fav_button.setImageResource(R.mipmap.ic_action_favourite);
 
                             }
                             if(cursor!=null)
                                 cursor.close();
                             break;
 
-                case "2":   fav_button.setText(context.getResources().getString(R.string.remove_from_favourites));
+                case "2":   fav_button.setImageResource(R.mipmap.ic_action_favourite);
                             break;
             }
 
@@ -229,7 +226,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                                     {   String deleteArg[]={data.getString(COL_MOVIE_ID)};
                                         context.getContentResolver()
                                                 .delete(MoviesContract.FavouritesEntry.buildFavouriteIDUri(data.getString(COL_MOVIE_ID)),null,deleteArg);
-                                        fav_button.setText(context.getResources().getString(R.string.add_to_favourites));
+                                        fav_button.setImageResource(R.mipmap.ic_action_unfavorite);
                                     }
                                     if(cursor!=null)
                                         cursor.close();
@@ -239,15 +236,16 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                                     int i=context.getContentResolver().delete(MoviesContract.FavouritesEntry.
                                         buildFavouriteIDUri(data.getString(COL_MOVIE_ID)),null,deleteArg);
                                     if(i>0)
-                                    {   fav_button.setVisibility(View.INVISIBLE);
+                                    {   fav_button.setImageResource(R.mipmap.ic_action_unfavorite);
+                                        fav_button.setVisibility(View.INVISIBLE);
                                         Toast.makeText(context,"Movie Removed from favourites",Toast.LENGTH_SHORT).show();
                                     }
                                     break;
                     }
                 }
             });
-            rate.setText("Rated:\n" + data.getString(COL_MOVIE_VOTE_AVERAGE) + "/10");
-            reldate.setText("Released On:\n" + data.getString(COL_MOVIE_RELEASE_DATE));
+            rate.setText(data.getString(COL_MOVIE_VOTE_AVERAGE) + "/10");
+            reldate.setText(data.getString(COL_MOVIE_RELEASE_DATE));
             summary.setText(data.getString(COL_MOVIE_OVERVIEW));
             if(hide)
             {   img.setVisibility(View.GONE);
@@ -288,7 +286,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             {   JSONObject obj=arr2.getJSONObject(i);
                 ListItem item=new ListItem();
                 item.setTitle(obj.optString("content"));
-                item.setKey(obj.optString("author"));
+                item.setKey(obj.optString("author")+" said:");
                 review_listItems.add(item);
             }
             review.setLayoutManager(new LinearLayoutManager(context));

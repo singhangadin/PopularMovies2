@@ -4,14 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="#22AAAAAA"
-    android:padding="16dp">
+    android:background="@color/colorPrimaryLight"
+    android:padding="16dp"
+    android:layout_marginBottom="4dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/author" />
+        android:id="@+id/author"
+        android:layout_marginBottom="4dp"/>
 
     <TextView
         android:layout_width="match_parent"

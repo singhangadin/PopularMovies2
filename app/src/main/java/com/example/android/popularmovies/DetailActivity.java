@@ -9,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 
 public class DetailActivity extends AppCompatActivity {
-    private Toolbar toolbar;
     private ImageView titleImage;
     private CollapsingToolbarLayout collapsingToolbar;
 
@@ -17,7 +16,7 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        toolbar = (Toolbar) findViewById(R.id.toolbar_detail);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_detail);
         toolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

@@ -7,12 +7,10 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="com.example.android.popularmovies.MainActivity">
-
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
-
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -20,9 +18,7 @@
             android:background="?attr/colorPrimary"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
-
     </android.support.design.widget.AppBarLayout>
-
     <fragment
         android:id="@+id/fragment_movies"
         android:name="com.example.android.popularmovies.MovieGridFragment"
@@ -30,5 +26,4 @@
         android:layout_height="match_parent"
         android:layout_weight="2"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
 </android.support.design.widget.CoordinatorLayout>
