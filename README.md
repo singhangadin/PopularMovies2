@@ -4,4 +4,10 @@ An Android Application for displaying popular movies
 
 Screenshot: 
 
+![device-2016-06-22-064058](https://cloud.githubusercontent.com/assets/7099405/16251688/c75f6842-3845-11e6-82ad-19ccc87b45da.png)
+![device-2016-06-22-064234](https://cloud.githubusercontent.com/assets/7099405/16251707/f02ce5a6-3845-11e6-8f62-f2224dce3e66.png)
+![device-2016-06-22-064549](https://cloud.githubusercontent.com/assets/7099405/16251717/12cfe90a-3846-11e6-9bc8-508a441ccdfb.png)
+![device-2016-06-22-064516](https://cloud.githubusercontent.com/assets/7099405/16251716/112e5ae6-3846-11e6-806b-f40aadd0502c.png)
+![device-2016-06-22-064425](https://cloud.githubusercontent.com/assets/7099405/16251711/03f839f0-3846-11e6-8a80-d38c9e8089a9.png)
+
  You need to add your api key here: [Link](https://github.com/Angads25/PopularMovies2/blob/master/app/src/main/java/com/example/android/popularmovies/model/SpKeys.java)
