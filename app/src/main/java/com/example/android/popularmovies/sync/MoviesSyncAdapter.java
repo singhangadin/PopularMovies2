@@ -37,7 +37,7 @@ import java.util.Vector;
 
 public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
     public final String LOG_TAG = MoviesSyncAdapter.class.getSimpleName();
-    public static final int SYNC_INTERVAL = 300;
+    public static final int SYNC_INTERVAL = 600;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
     private static final int MOVIES_NOTIFICATION_ID = 3000;
 
@@ -208,7 +208,7 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(iconId)
                         .setContentTitle(title)
-                        .setContentText("Your Data has been Updated. Click to see It.");
+                        .setContentText("Don't miss these Movies. Click now to see It.");
         Intent resultIntent = new Intent(getContext(), MainActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addNextIntent(resultIntent);
